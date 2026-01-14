@@ -31,8 +31,9 @@ elif ".venv" in os.listdir():
 else:
    print("No virtual environment is active, and none was detected in the workspace")
    run_command("python3 -m venv .venv", "Creating python venv...", "Encountered error while creating virtual environment")
-   print("Please restart your terminal to load the venv!") #I should be able to load it by calling it through os, but there's problems
-   exit(0)
+   run_command("source .venv/bin/activate", "Activating virtual environment...", "Encountered error while activating virtual environment")
+   # print("Please close your terminal and rerun this file to load the venv") #I should be able to load it by calling it through os, but there's problems
+   # exit(0)
 
 
 '''-------------------pip install-------------------'''
