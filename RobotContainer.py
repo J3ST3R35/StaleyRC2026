@@ -6,6 +6,7 @@ from commands2 import Command, cmd
 from subsystems import SampleSubsystem
 from commands import SampleCommand
 from util import FalconXboxController
+from ntcore.util import ntproperty
 
 class RobotContainer:
     """

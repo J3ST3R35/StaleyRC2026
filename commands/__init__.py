@@ -1,7 +1,2 @@
-# Imports
+from .SetIntakeSpeed import *
 from .SampleCommand import *
-
-# Classes to Import
-__all__ = [
-    "SampleCommand"
-]
