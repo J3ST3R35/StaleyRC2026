@@ -9,15 +9,16 @@ from wpimath.units import degrees
 from phoenix6.hardware import TalonFX
 from phoenix6.configs import TalonFXConfiguration, MotorOutputConfigs
 from phoenix6.signals import InvertedValue, NeutralModeValue
+from phoenix6.controls import PositionVoltage
 
 from util.FalconLogger import FalconLogger
 
 class Intake(Subsystem):
-    class IntakeSpeeds(Enum):
+    class IntakeSpeeds:
         STOP = 0
         IN = ntproperty("/Settings/Intake/IntakeSpeed", defaultValue=0.8, persistent=True)
 
-    class IntakePositions(Enum):
+    class IntakePositions:
         '''
         Position setpoints for the intake in degrees
         0 is (should be) the horizontal/outward/deployed position
@@ -44,17 +45,20 @@ class Intake(Subsystem):
         ## Pivot Motors
         #TODO: Pivot
         self.lead_pivot_motor = TalonFX(pivotLeadMotorID, "rio")
-        self.follow_pivot_motor = TalonFX(pivotFollowMotorID, "rio")
+        # self.follow_pivot_motor = TalonFX(pivotFollowMotorID, "rio")
 
+        # Config
         base_config = TalonFXConfiguration()
         base_config = base_config.with_motor_output(
             MotorOutputConfigs()
             .with_neutral_mode(NeutralModeValue.COAST)
         )
 
-        follow_config = base_config.__setattr__
+        self.lead_pivot_motor.configurator.apply(base_config)
+
+        # follow_config = base_config.__setattr__
         
-        self.follow_pivot_motor.configurator.apply(base_config)
+        # self.follow_pivot_motor.configurator.apply(base_config)
 
         ### Functionality Setup
         self.intake_speed = self.IntakeSpeeds.STOP
@@ -75,10 +79,12 @@ class Intake(Subsystem):
 
     def run(self) -> None:
         ## Intake
-        self.intake_motor.set(self.intake_speed.value)
+        #control speed by percentage
+        self.intake_motor.set(self.intake_speed)
 
         ## Pivot
-        self.lead_pivot_motor.set_control()
+        #control position
+        self.lead_pivot_motor.set_control(PositionVoltage(self.pivot_setpoint))
 
     def stop(self) -> None:
         pass
@@ -91,3 +97,6 @@ class Intake(Subsystem):
     
     def setPivotSetpoint(self, setpoint:IntakePositions|degrees) -> None:
         self.pivot_setpoint = setpoint
+    
+    def getPivotSetpoint(self) -> degrees:
+        return self.pivot_setpoint
