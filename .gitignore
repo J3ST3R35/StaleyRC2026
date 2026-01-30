@@ -164,6 +164,7 @@ networktables*.json
 simgui*.json
 ctre_sim/
 .logs/*.wpilog
+logs/*
 
 # vscode config
 .vscode
