@@ -5,7 +5,7 @@ class MyRobot(TimedRobot):
     def __init__(self, period = 0.02):
         super().__init__(period)
         self.xboxcontroller = XboxController(0)
-        self.backMotor = hardware.TalonFX(0, "rio")
+        self.iMotor = hardware.TalonFX(0, "rio")
         
     def robotInit(self):
         pass
@@ -14,4 +14,7 @@ class MyRobot(TimedRobot):
         pass
 
     def teleopPeriodic(self):
-        self.backMotor.set(self.xboxcontroller.getRightTriggerAxis())
+        trigger = self.xboxcontroller.getRightTriggerAxis()
+        power = trigger * 0.5
+        self.iMotor.set(power)
+        

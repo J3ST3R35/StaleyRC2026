@@ -38,6 +38,7 @@ class RobotContainer:
 
         # Driver Controller Button Binding
         driver1.a().whileTrue( cmdSampleRight )
+        driver1.x().onTrue( cmd.runOnce( intakeSys.intake ) )
 
     # Get Autonomous Command
     def getAutonomousCommand(self) -> Command:
